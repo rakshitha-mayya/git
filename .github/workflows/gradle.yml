@@ -25,12 +25,13 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    if: ${{ (github.event.review.state == 'approved') && (contains(github.event.pull_request.labels.*.name, 'test')) }}
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - run: echo ${{ github.event.review.state }}
+    - name: Dump GitHub context
+      if: ${{ (github.event.review.state == 'approved') && (contains(github.event.pull_request.labels.*.name, 'test')) }}
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo "$GITHUB_CONTEXT"
+    - run: echo ${{ github.event.review.state }}
+    
     - name: Build with Gradle
       run: ./gradlew build
 
